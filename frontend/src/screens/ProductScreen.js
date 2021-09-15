@@ -1,13 +1,30 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Row, Col, Image, ListGroup, Button, Card } from 'react-bootstrap'
 import Rating from '../components/Rating'
 import products from '../products'
+import axios from 'axios'
+
 
 // props.match - id produktu
 
 function ProductScreen({ match }) {
   // props.match to {id} z path="/product/:id"
-  const product = products.find(p => p._id == match.params.id) //listowanie z fakowych danych
+  // const product = products.find(p => p._id == match.params.id) //listowanie z fakowych danych
+
+  // inicjalizacja danych
+  const [product, setProduct] = useState([])
+
+  // useEffect uruchamiany za każdym razem gdy zmienia sie stan komponentu/ update danych
+  useEffect(() => {
+    async function fetchProduct() { // opakowanie w fucknji, zeby zapytanie było asynchroniczne
+      const { data } = await axios.get(`/api/products/${match.params.id}`)
+      setProduct(data)
+    }
+
+    fetchProduct()
+  }, [])
+
 
   return (
     <div>

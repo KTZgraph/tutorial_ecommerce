@@ -1,9 +1,28 @@
+import { useState, useEffect } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import Product from '../components/Product'
+import axios from 'axios';
+
 
 import products from '../products'
 
 function HomeScreen() {
+  // inicjalizacja danych
+  const [products, setProducts] = useState([])
+
+  // useEffect uruchamiany za każdym razem gdy zmienia sie stan komponentu/ update danych
+  useEffect(() => {
+    async function fetchProducts() { // opakowanie w fucknji, zeby zapytanie było asynchroniczne
+      const { data } = await axios.get('/api/products/')
+      setProducts(data)
+    }
+
+    fetchProducts()
+
+  }, [])
+
+
+
   return (
     <div>
       <h1>Latest Products</h1>
